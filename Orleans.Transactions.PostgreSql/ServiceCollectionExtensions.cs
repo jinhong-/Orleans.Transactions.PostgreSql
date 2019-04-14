@@ -14,21 +14,21 @@ namespace Orleans.Transactions.PostgreSql
         public static ISiloHostBuilder AddPostgreSqlTransactionalStateStorageAsDefault(this ISiloHostBuilder builder,
             Action<PostgreSqlTransactionalStateOptions> configureOptions = null)
         {
-            return builder.AddPostgreSqlTransactionalStateStorage(ProviderConstants.DEFAULT_STORAGE_PROVIDER_NAME,
+            return builder.AddAzureTableTransactionalStateStorage(ProviderConstants.DEFAULT_STORAGE_PROVIDER_NAME,
                 configureOptions);
         }
 
-        public static ISiloHostBuilder AddPostgreSqlTransactionalStateStorage(this ISiloHostBuilder builder,
+        public static ISiloHostBuilder AddAzureTableTransactionalStateStorage(this ISiloHostBuilder builder,
             string name, Action<PostgreSqlTransactionalStateOptions> configureOptions = null)
         {
             return builder.ConfigureServices(services =>
-                services.AddPostgreSqlTransactionalStateStorage(name, ob =>
+                services.AddAzureTableTransactionalStateStorage(name, ob =>
                 {
                     if (configureOptions != null) ob.Configure(configureOptions);
                 }));
         }
 
-        private static IServiceCollection AddPostgreSqlTransactionalStateStorage(this IServiceCollection services,
+        private static IServiceCollection AddAzureTableTransactionalStateStorage(this IServiceCollection services,
             string name,
             Action<OptionsBuilder<PostgreSqlTransactionalStateOptions>> configureOptions = null)
         {

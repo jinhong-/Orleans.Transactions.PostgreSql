@@ -41,14 +41,14 @@ namespace Orleans.Transactions.PostgreSql
                 committedState = _states[pos].Value;
             }
 
-            var prepareRecordsToRecover = _states.Where(x => x.SequenceId <= Metadata.CommittedSequenceId)
+            var prepareRecordsToRecover = _states.Where(x => x.SequenceId > Metadata.CommittedSequenceId)
                 .TakeWhile(x => x.TransactionManager.HasValue)
                 .Select(x => new PendingTransactionState<TState>
                 {
                     SequenceId = x.SequenceId,
                     TransactionManager = x.TransactionManager.Value,
                     State = x.Value,
-                    TimeStamp = x.TransactionTimestamp.UtcDateTime,
+                    TimeStamp = x.Timestamp.UtcDateTime,
                     TransactionId = x.TransactionId
                 })
                 .ToArray();
@@ -87,7 +87,7 @@ namespace Orleans.Transactions.PostgreSql
                     var persistedState = await PersistState(s, commitUpTo, existingState).ConfigureAwait(false);
                     if (existingState == null)
                     {
-                        _states.Insert(0, persistedState);
+                        _states.Insert(pos, persistedState);
                     }
                     else
                     {
@@ -105,9 +105,9 @@ namespace Orleans.Transactions.PostgreSql
         private bool FindState(long sequenceId, out int pos)
         {
             pos = 0;
-            foreach (var state in _states.Select((x, i) => (Index: i, SequenceId: sequenceId)))
+            foreach (var stateSequenceId in _states.Select(x => x.SequenceId))
             {
-                switch (state.SequenceId.CompareTo(sequenceId))
+                switch (stateSequenceId.CompareTo(sequenceId))
                 {
                     case 0:
                         return true;

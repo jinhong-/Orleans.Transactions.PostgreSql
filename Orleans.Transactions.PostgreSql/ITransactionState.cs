@@ -6,7 +6,7 @@ namespace Orleans.Transactions.PostgreSql
     {
         long SequenceId { get; }
         string TransactionId { get; }
-        DateTimeOffset TransactionTimestamp { get; }
+        DateTimeOffset Timestamp { get; }
         ParticipantId? TransactionManager { get; }
         TState Value { get; }
     }

@@ -28,7 +28,14 @@ namespace Orleans.Transactions.PostgreSql
         {
             var propertyName = string.Concat(columnName.Split(new[] {'_'}, StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => char.ToUpperInvariant(x[0]) + x.Substring(1)));
-            return typeof(TType).GetProperty(propertyName);
+            Console.WriteLine("Result: " + propertyName);
+            var prop = typeof(TType).GetProperty(propertyName);
+            if (prop == null)
+            {
+                Console.WriteLine("Prop: " + propertyName + " is null!");
+            }
+
+            return prop;
         }
 
         public virtual SqlMapper.IMemberMap GetMember(string columnName)

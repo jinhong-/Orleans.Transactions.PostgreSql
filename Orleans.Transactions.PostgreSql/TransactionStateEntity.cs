@@ -3,16 +3,16 @@ using Newtonsoft.Json.Linq;
 
 namespace Orleans.Transactions.PostgreSql
 {
-    internal class TransactionStateEntity
+    public class TransactionStateEntity
     {
         public long SequenceId { get; set; }
         
         public string TransactionId { get; set; }
 
-        public DateTimeOffset TransactionTimestamp { get; set; }
+        //public DateTimeOffset Timestamp { get; set; }
 
-        public JToken TransactionManager { get; set; }
+//        public JObject TransactionManager { get; set; }
 
-        public JToken Value { get; set; }
+//        public JObject Value { get; set; }
     }
 }
