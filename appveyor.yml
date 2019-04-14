@@ -9,9 +9,10 @@ before_build:
   # Display .NET Core version
   - cmd: dotnet --version
 build_script:
-  - cmd: dotnet pack
+  - cmd: dotnet pack /p:Version="%APPVEYOR_BUILD_VERSION%"
 deploy:
   provider: NuGet
   api_key:
     secure: ajs5P/buZ4+dds+MzCCUEXcy5eHqVID8klG98FZGy/TG3T2hri6FIHw03xwIqD0m
   skip_symbols: true
+  artifact: /.*\.nupkg/
