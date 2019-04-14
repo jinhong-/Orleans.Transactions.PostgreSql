@@ -87,7 +87,7 @@ namespace Orleans.Transactions.PostgreSql
                     Timestamp = x.timestamp,
                     Value = JsonConvert.DeserializeObject<TState>(x.value, _jsonSettings),
                     TransactionManager =
-                        JsonConvert.DeserializeObject<ParticipantId>(x.transaction_manager, _jsonSettings)
+                        JsonConvert.DeserializeObject<ParticipantId?>(x.transaction_manager, _jsonSettings)
                 }).ToArray();
             });
 
