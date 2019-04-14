@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Data;
-using System.Globalization;
-using Dapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -12,13 +9,6 @@ namespace Orleans.Transactions.PostgreSql
 {
     public class PostgreSqlTransactionalStateStorageFactory : ITransactionalStateStorageFactory
     {
-        static PostgreSqlTransactionalStateStorageFactory()
-        {
-            //SqlMapper.AddTypeHandler(typeof(ParticipantId), new TestTypeHandler());
-            //SqlMapper.SetTypeMap(typeof(TransactionStateEntity), new SnakeCaseMap<TransactionStateEntity>());
-            //SqlMapper.SetTypeMap(typeof(TransactionMetadataEntity), new SnakeCaseMap<TransactionMetadataEntity>());
-        }
-
         private readonly string _name;
         private readonly PostgreSqlTransactionalStateOptions _options;
         private readonly JsonSerializerSettings _jsonSettings;
