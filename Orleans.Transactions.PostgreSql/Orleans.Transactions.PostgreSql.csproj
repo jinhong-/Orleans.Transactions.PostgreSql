@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Dapper.FluentMap" Version="1.8.0" />
       <PackageReference Include="Microsoft.Orleans.Transactions" Version="2.2.4" />
       <PackageReference Include="Npgsql" Version="4.0.6" />
       <PackageReference Include="SqlKata" Version="1.1.7" />
