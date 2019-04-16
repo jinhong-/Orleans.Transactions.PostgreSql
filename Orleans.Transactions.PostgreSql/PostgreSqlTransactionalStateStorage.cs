@@ -40,6 +40,7 @@ namespace Orleans.Transactions.PostgreSql
             _jsonSettings = jsonSettings;
             _jsonSettings.TypeNameHandling = TypeNameHandling.Auto;
             _jsonSettings.DefaultValueHandling = DefaultValueHandling.Include;
+            _jsonSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
         }
 
         protected override Task<ITransactionMetadata> ReadMetadata()
