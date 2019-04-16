@@ -32,10 +32,10 @@ namespace Orleans.Transactions.PostgreSql
         private readonly PostgreSqlTransactionalStateOptions _options;
         private readonly JsonSerializerSettings _jsonSettings;
 
-        public PostgreSqlTransactionalStateStorage(string stateId, PostgreSqlTransactionalStateOptions options,
+        public PostgreSqlTransactionalStateStorage(StateReference stateReference, PostgreSqlTransactionalStateOptions options,
             JsonSerializerSettings jsonSettings)
         {
-            _stateId = stateId;
+            _stateId = stateReference.ToString();
             _options = options;
             _jsonSettings = jsonSettings;
             _jsonSettings.TypeNameHandling = TypeNameHandling.Auto;

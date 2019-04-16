@@ -34,16 +34,9 @@ namespace Orleans.Transactions.PostgreSql
         public ITransactionalStateStorage<TState> Create<TState>(string stateName, IGrainActivationContext context)
             where TState : class, new()
         {
-            var stateId = MakeStateId(context, stateName);
+            var stateRef = new StateReference(context.GrainInstance.GrainReference, stateName);
             return ActivatorUtilities.CreateInstance<PostgreSqlTransactionalStateStorage<TState>>(
-                context.ActivationServices, stateId, _options, _jsonSettings);
-        }
-
-        protected virtual string MakeStateId(IGrainActivationContext context, string stateName)
-        {
-            string grainKey = context.GrainInstance.GrainReference.ToShortKeyString();
-            var key = $"{grainKey}_{stateName}";
-            return key;
+                context.ActivationServices, stateRef, _options, _jsonSettings);
         }
     }
 }
