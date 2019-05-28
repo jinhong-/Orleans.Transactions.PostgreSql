@@ -2,7 +2,7 @@ using Orleans.Transactions.Abstractions;
 
 namespace Orleans.Transactions.PostgreSql
 {
-    public interface ITransactionMetadata
+    public interface ITransactionMetadataEntity
     {
         string ETag { get; }
         long CommittedSequenceId { get; }

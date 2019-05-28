@@ -10,9 +10,9 @@ namespace Orleans.Transactions.PostgreSql
     public abstract class TransactionalStateStorage<TState> : ITransactionalStateStorage<TState>
         where TState : class, new()
     {
-        protected ITransactionMetadata Metadata { get; private set; }
-        private List<ITransactionState<TState>> _states;
-        protected IEnumerable<ITransactionState<TState>> States => _states;
+        protected ITransactionMetadataEntity Metadata { get; private set; }
+        private List<ITransactionStateEntity<TState>> _states;
+        protected IEnumerable<ITransactionStateEntity<TState>> States => _states;
 
         public async Task<TransactionalStorageLoadResponse<TState>> Load()
         {
@@ -53,8 +53,11 @@ namespace Orleans.Transactions.PostgreSql
                 })
                 .ToArray();
 
-            await LoadFinalize();
-
+            foreach (var state in _states)
+            {
+                state.ClearValue();
+            }
+            
             var metadata = Metadata.Value;
             return new TransactionalStorageLoadResponse<TState>(Metadata.ETag, committedState,
                 Metadata.CommittedSequenceId, metadata, prepareRecordsToRecover);
@@ -78,7 +81,7 @@ namespace Orleans.Transactions.PostgreSql
             {
                 foreach (var s in statesToPrepare)
                 {
-                    ITransactionState<TState> existingState = null;
+                    ITransactionStateEntity<TState> existingState = null;
                     if (FindState(s.SequenceId, out var pos))
                     {
                         existingState = _states[pos];
@@ -122,19 +125,18 @@ namespace Orleans.Transactions.PostgreSql
             return false;
         }
 
-        protected abstract Task<ITransactionMetadata> ReadMetadata();
-        protected abstract Task<ITransactionState<TState>[]> ReadStates(long fromSequenceId);
+        protected abstract Task<ITransactionMetadataEntity> ReadMetadata();
+        protected abstract Task<ITransactionStateEntity<TState>[]> ReadStates(long fromSequenceId);
 
-        protected abstract Task<ITransactionState<TState>> PersistState(PendingTransactionState<TState> pendingState,
+        protected abstract Task<ITransactionStateEntity<TState>> PersistState(PendingTransactionState<TState> pendingState,
             long? commitUpTo,
-            ITransactionState<TState> existingState = null);
+            ITransactionStateEntity<TState> existingState = null);
 
-        protected abstract Task RemoveAbortedState(ITransactionState<TState> state);
+        protected abstract Task RemoveAbortedState(ITransactionStateEntity<TState> state);
 
-        protected abstract Task<ITransactionMetadata> PersistMetadata(TransactionalStateMetaData value,
+        protected abstract Task<ITransactionMetadataEntity> PersistMetadata(TransactionalStateMetaData value,
             long commitSequenceId);
 
         protected virtual Task StoreFinalize(long? commitUpTo) => Task.CompletedTask;
-        protected virtual Task LoadFinalize() => Task.CompletedTask;
     }
 }

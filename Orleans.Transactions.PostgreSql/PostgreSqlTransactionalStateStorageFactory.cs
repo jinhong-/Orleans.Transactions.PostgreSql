@@ -35,7 +35,7 @@ namespace Orleans.Transactions.PostgreSql
             where TState : class, new()
         {
             var stateRef = new StateReference(context.GrainInstance.GrainReference, stateName);
-            return ActivatorUtilities.CreateInstance<PostgreSqlTransactionalStateStorage<TState>>(
+            return ActivatorUtilities.CreateInstance<PostgreSqlTransactionalStateStorage2<TState>>(
                 context.ActivationServices, stateRef, _options, _jsonSettings);
         }
     }
