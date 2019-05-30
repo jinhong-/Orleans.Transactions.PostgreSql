@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Npgsql;
 using Orleans.Transactions.Abstractions;
 using SqlKata.Compilers;
@@ -369,7 +370,7 @@ namespace Orleans.Transactions.PostgreSql
                             state.Timestamp,
                             state.TransactionId
                         })
-                        .FirstOrDefaultAsync<int>();
+                        .FirstOrDefaultAsync<int>().ConfigureAwait(false);
                     if (rowsUpdated != 1)
                         throw new InvalidOperationException("Something went wrong while persisting existing state");
                 });
@@ -394,9 +395,9 @@ namespace Orleans.Transactions.PostgreSql
                                 "state_id", "sequence_id", "transaction_manager", "value", "timestamp", "transaction_id"
                             },
                             _insertStateBuffer.Select(CreatePropertyBagForInsert).ToArray())
-                        .FirstOrDefaultAsync();
+                        .FirstOrDefaultAsync().ConfigureAwait(false);;
                 });
-                
+
                 _insertStateBuffer.Clear();
             }
 
