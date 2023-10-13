@@ -14,21 +14,38 @@ namespace Orleans.Transactions.PostgreSql
         public static ISiloHostBuilder AddPostgreSqlTransactionalStateStorageAsDefault(this ISiloHostBuilder builder,
             Action<PostgreSqlTransactionalStateOptions> configureOptions = null)
         {
-            return builder.AddAzureTableTransactionalStateStorage(ProviderConstants.DEFAULT_STORAGE_PROVIDER_NAME,
+            return builder.AddPostgreSqlTableTransactionalStateStorage(ProviderConstants.DEFAULT_STORAGE_PROVIDER_NAME,
                 configureOptions);
         }
 
-        public static ISiloHostBuilder AddAzureTableTransactionalStateStorage(this ISiloHostBuilder builder,
+        public static ISiloHostBuilder AddPostgreSqlTableTransactionalStateStorage(this ISiloHostBuilder builder,
             string name, Action<PostgreSqlTransactionalStateOptions> configureOptions = null)
         {
             return builder.ConfigureServices(services =>
-                services.AddAzureTableTransactionalStateStorage(name, ob =>
+                services.AddPostgreSqlTableTransactionalStateStorage(name, ob =>
                 {
                     if (configureOptions != null) ob.Configure(configureOptions);
                 }));
         }
 
-        private static IServiceCollection AddAzureTableTransactionalStateStorage(this IServiceCollection services,
+        public static ISiloBuilder AddPostgreSqlTransactionalStateStorageAsDefault(this ISiloBuilder builder,
+            Action<PostgreSqlTransactionalStateOptions> configureOptions = null)
+        {
+            return builder.AddPostgreSqlTableTransactionalStateStorage(ProviderConstants.DEFAULT_STORAGE_PROVIDER_NAME,
+                configureOptions);
+        }
+
+        public static ISiloBuilder AddPostgreSqlTableTransactionalStateStorage(this ISiloBuilder builder,
+            string name, Action<PostgreSqlTransactionalStateOptions> configureOptions = null)
+        {
+            return builder.ConfigureServices(services =>
+                services.AddPostgreSqlTableTransactionalStateStorage(name, ob =>
+                {
+                    if (configureOptions != null) ob.Configure(configureOptions);
+                }));
+        }
+
+        private static IServiceCollection AddPostgreSqlTableTransactionalStateStorage(this IServiceCollection services,
             string name,
             Action<OptionsBuilder<PostgreSqlTransactionalStateOptions>> configureOptions = null)
         {
